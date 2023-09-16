@@ -42,6 +42,41 @@ const Employee = {
       }
     );
   },
+  deleteEmployeeById: (id, callback) => {
+    db.query('DELETE FROM employees WHERE id = ?', [id], (err, results) => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      callback(null);
+    });
+  },
+  updateEmployeeById: (id, updatedEmployeeData, callback) => {
+    db.query(
+      'UPDATE employees SET ? WHERE id = ?',
+      [updatedEmployeeData, id],
+      (err, results) => {
+        if (err) {
+          callback(err);
+          return;
+        }
+        callback(null);
+      }
+    );
+  },
+  getEmployeeById: (id, callback) => {
+    db.query('SELECT * FROM employees WHERE id = ?', [id], (err, results) => {
+      if (err) {
+        callback(err, null);
+        return;
+      }
+      if (results.length === 0) {
+        callback({ message: 'Employee not found' }, null);
+        return;
+      }
+      callback(null, results[0]);
+    });
+  },
 };
 
 module.exports = Employee;
